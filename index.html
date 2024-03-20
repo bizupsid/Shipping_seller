@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bizup Shipping Calculator</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header bg-success text-white">
+            <h5 class="mb-0">Bizup Shipping Calculator</h5>
+          </div>
+          <div class="card-body">
+            <form id="shippingForm">
+              <div class="form-group">
+                <label for="pickupPincode">Your Pincode</label>
+                <input type="text" class="form-control" id="pickupPincode" placeholder="Enter 6-digit Pincode for pickup" maxlength="6" required pattern="\d{6}">
+              </div>
+              <div class="form-group">
+                <label for="deliveryPincode">Buyer's Pincode</label>
+                <input type="text" class="form-control" id="deliveryPincode" placeholder="Enter 6-digit Pincode for delivery" maxlength="6" required pattern="\d{6}">
+              </div>
+              <div class="form-group">
+                <label>Payment Mode</label>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="paymentMode" id="cod" value="cod">
+                  <label class="form-check-label" for="cod">COD</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="paymentMode" id="prepaid" value="prepaid" checked>
+                  <label class="form-check-label" for="prepaid">Prepaid</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="invoiceAmount">Invoice value (optional)</label>
+                <input type="text" class="form-control" id="invoiceAmount" placeholder="10000">
+              </div>
+              <div class="form-group">
+                <label for="weight">Weight (Kgs)</label>
+                <input type="text" class="form-control" id="weight" placeholder="2.5" required pattern="^\d+(\.\d{1,2})?$">
+              </div>
+              <div class="form-group">
+                <label>Box Packaging</label>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="boxPackaging" id="boxYes" value="yes">
+                  <label class="form-check-label" for="boxYes">Yes</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="boxPackaging" id="boxNo" value="no" checked>
+                  <label class="form-check-label" for="boxNo">No</label>
+                </div>
+              </div>
+              <div id="dimensionsContainer" class="form-group" style="display: none;">
+                <label>Dimensions</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Inch" pattern="^\d+(\.\d{1,2})?$" required>
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">X</span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="Inch" pattern="^\d+(\.\d{1,2})?$" required>
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">X</span>
+                  </div>
+                  <input type="text" class="form-control" placeholder="Inch" pattern="^\d+(\.\d{1,2})?$" required>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-success" id="calculateBtn" disabled>Calculate</button>
+              <button type="reset" class="btn btn-secondary" id="resetBtn">Reset</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shipping Cost Popup -->
+  <div class="modal fade" id="shippingCostModal" tabindex="-1" role="dialog" aria-labelledby="shippingCostModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-success text-white d-flex justify-content-between align-items-center">
+          <h5 class="modal-title mb-0" id="shippingCostModalLabel">Shipping charges</h5>
+          <span class="badge badge-success">Best Price</span>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0">INR 450/-</h4>
+            <p class="mb-0">Bizup Delivery</p>
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <p class="mb-1">COD advance</p>
+              <p class="mb-1">Lowest price</p>
+              <p class="mb-1">Same day pickup</p>
+              <p class="mb-1">Zero RTO</p>
+              <p class="mb-0">Video Verification</p>
+            </div>
+            <div class="col-6 text-right">
+              <p class="mb-1">20% <span class="badge badge-secondary">Others</span></p>
+              <p class="mb-1"><span class="badge badge-danger">&#10005;</span> <span class="badge badge-success">&#10003;</span></p>
+              <p class="mb-1"><span class="badge badge-danger">&#10005;</span> <span class="badge badge-success">&#10003;</span></p>
+              <p class="mb-1"><span class="badge badge-danger">&#10005;</span> <span class="badge badge-success">&#10003;</span></p>
+              <p class="mb-0"><span class="badge badge-danger">&#10005;</span> <span class="badge badge-success">&#10003;</span></p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" data-dismiss="modal">Confirm &raquo;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
